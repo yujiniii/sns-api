@@ -1,15 +1,10 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { SigninUserDto } from './dto/signin-user.dto';
+import { UseGuards } from '@nestjs/common/decorators';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from './user.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -17,16 +12,20 @@ export class UsersController {
 
   @Post('/')
   createUser(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto);
+    const result = this.usersService.createUser(createUserDto);
+    return Object.assign(result);
   }
 
-  @Post('session')
+  @Get('session')
   signIn(@Body() signinUserDto: SigninUserDto) {
-    return this.usersService.signIn(signinUserDto);
+    const result = this.usersService.signIn(signinUserDto);
+    return Object.assign(result);
   }
 
   @Get()
-  tokenTest() {
-    return this.usersService.tokenTest();
+  @UseGuards(AuthGuard())
+  tokenTest(@GetUser() getUser) {
+    console.log(getUser);
+    return Object.assign(getUser);
   }
 }
