@@ -18,7 +18,10 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   nickname: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 1000,
+  })
   password: string;
 
   //   @OneToMany(() => Board, (board) => board.userId)
