@@ -25,7 +25,7 @@ export class UsersController {
   @Get()
   @UseGuards(AuthGuard())
   tokenTest(@GetUser() getUser) {
-    console.log(getUser);
+    console.log(typeof getUser.email);
     return Object.assign(getUser);
   }
 }
