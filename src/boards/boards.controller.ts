@@ -21,7 +21,8 @@ export class BoardsController {
 
   @Post()
   create(@Body() createBoardDto: CreateBoardDto, @GetUser() getUser) {
-    return this.boardsService.create(createBoardDto, getUser);
+    const result = this.boardsService.create(createBoardDto, getUser);
+    return Object.assign(result);
   }
 
   @Get()
