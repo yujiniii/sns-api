@@ -36,6 +36,15 @@ export class BoardsService {
   }
 
   async findOne(id: number) {
+    // 조회수 +1
+    await this.boardRepo
+      .createQueryBuilder()
+      .update()
+      .set({ watchCount: () => 'watchCount+1' })
+      .where('boardId = :boardId', { boardId: id })
+      .execute();
+
+    const theBoard = await this.foundBoard(id); // 조회수 변경 이후  조회
     return theBoard;
   }
 
