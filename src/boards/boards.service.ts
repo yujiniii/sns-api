@@ -52,8 +52,21 @@ export class BoardsService {
     return `This action updates a #${id} board`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} board`;
+  async remove(id: number, getUser) {
+    const user = await this.foundEmail(getUser.email);
+    const board = await this.foundBoard(id);
+    console.log('user out fn : ', user);
+    console.log('board out fn : ', board);
+    console.log(user.userId, board.user.userId);
+    if (user.userId === board.user.userId) {
+      await this.boardRepo.softDelete(id).catch((err) => {
+        console.log(err);
+        throw new NotFoundException('삭제할 게시물이 존재하지 않습니다.');
+      });
+    } else {
+      throw new ForbiddenException('본인의 게시글만 삭제가 가능합니다.');
+    }
+    return { message: '삭제 성공' };
   }
   findRealTag(hashtags: string) {
     let hashtags_db: string[] = [];
