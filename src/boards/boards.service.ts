@@ -19,11 +19,8 @@ export class BoardsService {
   ) {}
   async create(createBoardDto: CreateBoardDto, getUser) {
     const { title, content, hashtags } = createBoardDto;
-    let hashtags_db = this.findRealTag(hashtags);
-    const user = await this.userRepo.findOne({
-      where: { email: getUser.email },
-    });
-
+    let hashtags_db: string[] = this.findRealTag(hashtags);
+    const user = await this.foundEmail(getUser.email);
     const newBoard = await this.boardRepo.create({
       title,
       content,
