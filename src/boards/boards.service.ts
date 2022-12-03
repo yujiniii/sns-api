@@ -68,6 +68,15 @@ export class BoardsService {
     }
     return { message: '삭제 성공' };
   }
+
+  async restore(id: number) {
+    const restore = await this.boardRepo.restore(id);
+    if (!restore.affected) {
+      throw new NotFoundException('복원할 게시물이 존재하지 않습니다.');
+    }
+    return { message: '복원 성공' };
+  }
+
   findRealTag(hashtags: string) {
     let hashtags_db: string[] = [];
     let temp: string[] = [];
