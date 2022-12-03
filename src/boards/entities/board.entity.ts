@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -33,15 +34,11 @@ export class Board extends BaseEntity {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  // ----- 둘중 뭐 쓸지 좀 더 고민해보기 ----
   @DeleteDateColumn()
   deletedAt!: Date | null;
 
-  @Column({ default: false })
-  isDeleted: boolean;
-
   // ----- User : Board = 1:N ----
-  @ManyToOne(() => User, (user) => user.userId)
-  // @JoinColumn() 생략가능
+  @ManyToOne(() => User, (user) => user.userId, { eager: true })
+  @JoinColumn({ name: 'userId' }) //생략가능
   user: User;
 }
