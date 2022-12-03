@@ -42,5 +42,8 @@ export class BoardsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.boardsService.remove(+id);
+  @Patch(':id/deleted')
+  restore(@Param('id') id: string) {
+    return this.boardsService.restore(+id);
   }
 }
