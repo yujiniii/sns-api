@@ -12,9 +12,8 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepo: Repository<User>,
-    private jwtService: JwtService,
-  ) // private readonly logger: Logger,
-  {}
+    private jwtService: JwtService, // private readonly logger: Logger,
+  ) {}
   async createUser(createUserDto: CreateUserDto) {
     const { email, nickname, password } = createUserDto;
     const hashedPassword = await bcrypt.hash(password, 10);
