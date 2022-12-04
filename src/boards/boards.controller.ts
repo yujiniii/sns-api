@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/users/user.decorator';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
+import { SearchBoardDto } from './dto/search-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 
 @UseGuards(AuthGuard())
@@ -26,8 +28,9 @@ export class BoardsController {
   }
 
   @Get()
-  findAll() {
-    return this.boardsService.findAll();
+  findAll(@Query() searchBoardDto: SearchBoardDto) {
+    const result = this.boardsService.findAll(searchBoardDto);
+    return Object.assign(result);
   }
 
   @Get(':id')

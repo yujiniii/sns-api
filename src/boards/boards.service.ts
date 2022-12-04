@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
+import { SearchBoardDto } from './dto/search-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { Board } from './entities/board.entity';
 
@@ -36,8 +37,30 @@ export class BoardsService {
     return newBoard;
   }
 
-  findAll() {
-    return `This action returns all boards`;
+  async findAll(searchBoardDto: SearchBoardDto) {
+    const {
+      keyword = '',
+      hastags,
+      orderby = 'createdAt',
+      isAsc = 'ASC',
+      page = '10',
+      pageno = '1',
+    } = searchBoardDto;
+    const offset = (Number(pageno) - 1) * Number(page);
+    const boards = await this.boardRepo
+      .createQueryBuilder()
+      .where('title like  :key', { key: '%' + keyword + '%' })
+      .orWhere('content like  :key', { key: '%' + keyword + '%' })
+      .take(Number(page))
+      .skip(offset)
+      .orderBy(orderby, isAsc)
+      .getMany();
+
+    if (!boards || typeof boards === 'undefined') {
+      throw new NotFoundException('조회 오류');
+    }
+    console.log(boards);
+    return boards;
   }
 
   async findOne(id: number) {
