@@ -1,4 +1,5 @@
 import { Board } from 'src/boards/entities/board.entity';
+import { Like } from 'src/likes/entities/like.entity';
 import {
   BaseEntity,
   Column,
@@ -27,4 +28,8 @@ export class User extends BaseEntity {
   // ----- User : Board = 1:N ----
   @OneToMany(() => Board, (board) => board.user)
   board: Board[];
+
+  // ----- User : Like = 1 : N -----
+  @OneToMany(() => Like, (like) => like.user)
+  like: Like[];
 }

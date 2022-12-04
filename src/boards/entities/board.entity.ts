@@ -1,3 +1,4 @@
+import { Like } from 'src/likes/entities/like.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
@@ -9,6 +10,7 @@ import {
   DeleteDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -41,4 +43,8 @@ export class Board extends BaseEntity {
   @ManyToOne(() => User, (user) => user.userId, { eager: true })
   @JoinColumn({ name: 'userId' }) //생략가능
   user: User;
+
+  // ----- Board : Like = 1 : N -----
+  @OneToMany(() => Like, (like) => like.board)
+  like: Like[];
 }
