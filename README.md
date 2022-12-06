@@ -1,30 +1,76 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# SNS API 서비스
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+22.11.29~22.12. `Nest.js` `BACKEND`
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 개요
 
-## Description
+- 본 서비스는 SNS(Social Networking Service) 입니다.
+- 사용자는 본 서비스에 접속하여, 게시물을 업로드 하거나 다른 사람의 게시물을 확인하고, 좋아요를 누를 수 있습니다.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### A. 유저관리
+
+#### **유저 회원가입**
+
+* 이메일을 ID로 사용합니다.
+
+#### **유저 로그인 및 인증**
+
+* JTW 토큰을 발급받으며, 이를 추후 사용자 인증으로 사용합니다.
+
+- 로그아웃은 프론트엔드에서 처리.
+
+### B. 게시글
+
+#### **게시글 생성**
+
+* 제목, 내용, 해시태그 등을 입력하여 생성합니다.
+* 제목, 내용, 해시태그는 필수 입력사항이며, 작성자 정보는 request body에 존재하지 않고, 해당 API 를 요청한 인증정보에서 추출하여 등록 합니다.
+* 해시태그는 #로 시작되고 , 로 구분되는 텍스트가 입력됩니다.
+
+#### **게시글 수정**
+
+* 작성자만 수정할 수 있습니다.
+
+#### **게시글 삭제**
+
+* 작성자만 삭제할 수 있습니다.
+* 작성자는 삭제된 게시글을 다시 복구할 수 있습니다.
+
+#### **게시글 상세보기**
+
+* 모든 사용자는 모든 게시물에 보기권한이 있습니다.
+* 작성자 포함한 사용자가 게시글을 상세보기 하면 조회수가 1 증가합니다. (횟수 제한 없음)
+
+#### **좋아요**
+
+* 작성자를 포함한 사용자는 본 게시글에 좋아요를 누를 수 있습니다.
+* 좋아요된 게시물에 다시 좋아요를 누르면 취소됩니다.
+
+#### **게시글 목록**
+
+* 모든 사용자는 모든 게시물에 보기권한이 있습니다.
+* 게시글 목록에는 제목, 작성자, 해시태그, 작성일, 좋아요 수, 조회수 가 포함됩니다.
+
+**Ordering**   
+사용자는 게시글 목록을 원하는 값으로 정렬할 수 있습니다.  
+오름차 순, 내림차 순을 선택할 수 있습니다.
+
+**Searching**  
+사용자는 입력한 키워드로 해당 키워드를 포함한 게시물을 조회할 수 있습니다.
+
+**Filtering**   
+사용자는 지정한 키워드로 해당 키워드를 포함한 게시물을 필터링할 수 있습니다.
+
+**Pagination**  
+사용자는 1 페이지 당 게시글 수를 조정할 수 있습니다. (default: 10건)
+
+## 사용기술
+
+`nestjs`  `typeorm`  `mysql`
+
+## API 명세
+
+[POSTMAN DOCUMENTATION](https://documenter.getpostman.com/view/19606295/2s8YzP35AC)
 
 ## Installation
 
@@ -44,29 +90,6 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
