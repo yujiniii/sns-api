@@ -35,7 +35,8 @@ export class BoardsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.boardsService.findOne(+id);
+    const result = this.boardsService.findOne(+id);
+    return Object.assign(result);
   }
 
   @Patch(':id')
@@ -50,11 +51,13 @@ export class BoardsController {
 
   @Delete(':id')
   remove(@Param('id') id: string, @GetUser() getUser: any) {
-    return this.boardsService.remove(+id, getUser);
+    const result = this.boardsService.remove(+id, getUser);
+    return Object.assign(result);
   }
 
   @Patch(':id/deleted')
   restore(@Param('id') id: string, @GetUser() getUser) {
-    return this.boardsService.restore(+id, getUser);
+    const result = this.boardsService.restore(+id, getUser);
+    return Object.assign(result);
   }
 }
