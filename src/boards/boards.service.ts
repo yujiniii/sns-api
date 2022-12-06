@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 // import { MySQLDataSource } from 'src/config/typeorm.config';
 import { User } from 'src/users/entities/user.entity';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { SearchBoardDto } from './dto/search-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
@@ -23,6 +23,7 @@ export class BoardsService {
     @InjectRepository(User)
     private userRepo: Repository<User>,
   ) {}
+
   async create(createBoardDto: CreateBoardDto, getUser) {
     const { title, content, hashtags } = createBoardDto;
     let hashtags_db: string[] = this.findRealTag(hashtags);
@@ -97,12 +98,17 @@ export class BoardsService {
     return { message: '삭제 성공' };
   }
 
-  async restore(id: number) {
-    const restore = await this.boardRepo.restore(id);
-    if (!restore.affected) {
-      throw new NotFoundException('복원할 게시물이 존재하지 않습니다.');
+  async restore(id: number, getUser) {
+    await this.boardRepo.restore(id);
+    const user = await this.foundEmail(getUser.email);
+    const board = await this.foundBoard(id);
+    console.log(board);
+    if (board.user.userId === user.userId) {
+      return { message: '복원 성공' };
+    } else {
+      await this.boardRepo.softDelete(id);
+      throw new ForbiddenException('작성자만 삭제가 가능합니다.');
     }
-    return { message: '복원 성공' };
   }
 
   findRealTag(hashtags: string) {
@@ -129,6 +135,7 @@ export class BoardsService {
     }
     return hashtags_db;
   }
+
   // async transaction(data: DataSource, boardId: number) {
   //   // ----------- 조회수 +1 트랜잭션 -------------(안됨 힝구리퐁퐁)
   //   const qRunner = await data.createQueryRunner();
@@ -168,6 +175,7 @@ export class BoardsService {
       return user;
     }
   }
+
   async foundBoard(id: number) {
     const board = await this.boardRepo
       .findOne({ where: { boardId: id } })

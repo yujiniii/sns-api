@@ -1,13 +1,13 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/users/user.decorator';
@@ -49,7 +49,7 @@ export class BoardsController {
   }
 
   @Patch(':id/deleted')
-  restore(@Param('id') id: string) {
-    return this.boardsService.restore(+id);
+  restore(@Param('id') id: string, @GetUser() getUser) {
+    return this.boardsService.restore(+id, getUser);
   }
 }
