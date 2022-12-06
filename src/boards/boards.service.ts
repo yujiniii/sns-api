@@ -78,8 +78,25 @@ export class BoardsService {
     return theBoard;
   }
 
-  update(id: number, updateBoardDto: UpdateBoardDto) {
-    return `This action updates a #${id} board`;
+  async update(id: number, updateBoardDto: UpdateBoardDto, getUser) {
+    const board = await this.foundBoard(id); // 수정 이후  조회
+    const user = await this.foundEmail(getUser.email);
+    if (user.userId === board.user.userId) {
+      await this.boardRepo
+        .createQueryBuilder()
+        .update()
+        .set({
+          title: updateBoardDto.title,
+          content: updateBoardDto.content,
+        })
+        .where('boardId = :boardId', { boardId: id })
+        .execute();
+
+      const theBoard = await this.foundBoard(id); // 수정 이후  조회
+      return theBoard;
+    } else {
+      throw new ForbiddenException('본인의 게시글만 삭제가 가능합니다.');
+    }
   }
 
   async remove(id: number, getUser) {

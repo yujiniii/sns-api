@@ -39,8 +39,13 @@ export class BoardsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBoardDto: UpdateBoardDto) {
-    return this.boardsService.update(+id, updateBoardDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateBoardDto: UpdateBoardDto,
+    @GetUser() getUser,
+  ) {
+    const result = this.boardsService.update(+id, updateBoardDto, getUser);
+    return Object.assign(result);
   }
 
   @Delete(':id')
