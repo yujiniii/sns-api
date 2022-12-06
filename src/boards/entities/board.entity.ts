@@ -1,16 +1,16 @@
 import { Like } from 'src/likes/entities/like.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
   BaseEntity,
+  Column,
   CreateDateColumn,
-  UpdateDateColumn,
   DeleteDateColumn,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -30,6 +30,9 @@ export class Board extends BaseEntity {
   @Column({ default: 0 })
   watchCount: number;
 
+  @Column({ default: 0 })
+  likeCount: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 
@@ -40,7 +43,7 @@ export class Board extends BaseEntity {
   deletedAt!: Date | null;
 
   // ----- User : Board = 1:N ----
-  @ManyToOne(() => User, (user) => user.userId, { eager: true })
+  @ManyToOne(() => User, (user) => user.board, { eager: true })
   @JoinColumn({ name: 'userId' }) //생략가능
   user: User;
 
