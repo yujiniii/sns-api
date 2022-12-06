@@ -41,7 +41,7 @@ export class BoardsService {
   async findAll(searchBoardDto: SearchBoardDto) {
     const {
       keyword = '',
-      hastags,
+      hastags = '',
       orderby = 'createdAt',
       isAsc = 'ASC',
       page = '10',
@@ -52,6 +52,7 @@ export class BoardsService {
       .createQueryBuilder()
       .where('title like  :key', { key: '%' + keyword + '%' })
       .orWhere('content like  :key', { key: '%' + keyword + '%' })
+      .orWhere('hashtags like  :key', { key: '%' + hastags + '%' })
       .take(Number(page))
       .skip(offset)
       .orderBy(orderby, isAsc)
