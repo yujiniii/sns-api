@@ -15,8 +15,8 @@ jobs:
       - name: my build
         run: |
           npm install
-      #   npm test
           npm build
+
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
   # - name: npm cache
