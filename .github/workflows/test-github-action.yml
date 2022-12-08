@@ -9,13 +9,13 @@ jobs:
       node-version: [16.x]
 steps:
   - name: Checkout main
-    uses: action/checkout@v2 # 만들어져있는 action 사용
+    uses: actions/checkout@v2 # 만들어져있는 action 사용
   - name: build
     uses: npm install
 #      npm test
       npm build
   - name: npm cache
-    uses: action/cache@v2
+    uses: actions/cache@v2
     with:
       path: ~/.npm
       key: ${{runner.os}}-build-${{hashFiles('**/package-lock.json')}}
