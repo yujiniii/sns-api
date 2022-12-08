@@ -12,6 +12,16 @@ steps:
   - name: Checkout main
     uses: actions/checkout@v2 # 만들어져있는 action 사용
 
+  - name: my build
+    run: 
+      npm install
+#     npm test
+      npm build
+
+  - run: echo "🍏 This job's status is ${{ job.status }}."
+
+
+  
   # - name: npm cache
   #   uses: actions/cache@v2
   #   with:
@@ -19,11 +29,3 @@ steps:
   #     key: ${{runner.os}}-build-${{hashFiles('**/package-lock.json')}}
   #     restore-key: |
   #       ${{runner.os}}-build-${{hashFiles('**/package-lock.json')}}
-
-  - name: build
-    run: 
-      npm install
-#     npm test
-      npm build
-
-  - run: echo "🍏 This job's status is ${{ job.status }}."
