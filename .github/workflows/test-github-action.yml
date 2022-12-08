@@ -1,19 +1,16 @@
 name: sns github-action
 on:
-  push: branches:[main]
+  push: branches: [main]
 jobs:
   build:
     runs-on: windows-latest
     strategy:
-    matrix:
-      node-version: [16.x]
+      matrix:
+        node-version: [16.x, 12.x]
 steps:
   - name: Checkout main
     uses: actions/checkout@v2 # 만들어져있는 action 사용
-  - name: build
-    uses: npm install
-#      npm test
-      npm build
+
   - name: npm cache
     uses: actions/cache@v2
     with:
@@ -21,19 +18,11 @@ steps:
       key: ${{runner.os}}-build-${{hashFiles('**/package-lock.json')}}
       restore-key: |
         ${{runner.os}}-build-${{hashFiles('**/package-lock.json')}}
+
+  - name: build
+    run: 
+      npm install
+#     npm test
+      npm build
+
   - run: echo "🍏 This job's status is ${{ job.status }}."
-
-  # - name: yarn dependencies
-  #   # uses: action/cache@v1
-  #   # id: yarn-cache
-  #   # with:
-  #   #   path: node_modules
-  #   #   key: ${{runner.os}}-yarn-${{hashFiles('')}}
-  # - name: Use node??
-  #   uses: action/setup-node@v1
-  #   with:
-  #     node-version: ${{matrix.node-version}}
-
-  # - name: npm install
-  #   uses: |
-  #     npm install
