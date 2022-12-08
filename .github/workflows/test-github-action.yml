@@ -12,13 +12,13 @@ steps:
   - name: Checkout main
     uses: actions/checkout@v2 # 만들어져있는 action 사용
 
-  - name: npm cache
-    uses: actions/cache@v2
-    with:
-      path: ~/.npm
-      key: ${{runner.os}}-build-${{hashFiles('**/package-lock.json')}}
-      restore-key: |
-        ${{runner.os}}-build-${{hashFiles('**/package-lock.json')}}
+  # - name: npm cache
+  #   uses: actions/cache@v2
+  #   with:
+  #     path: ~/.npm
+  #     key: ${{runner.os}}-build-${{hashFiles('**/package-lock.json')}}
+  #     restore-key: |
+  #       ${{runner.os}}-build-${{hashFiles('**/package-lock.json')}}
 
   - name: build
     run: 
