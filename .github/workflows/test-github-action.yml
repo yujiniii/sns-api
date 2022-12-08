@@ -18,8 +18,7 @@ jobs:
           npm build
 
   - run: echo "🍏 This job's status is ${{ job.status }}."
-뭐해?
-  
+
   # - name: npm cache
   #   uses: actions/cache@v2
   #   with:
