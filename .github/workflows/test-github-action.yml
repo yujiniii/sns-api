@@ -2,6 +2,7 @@ name: sns-github-action
 on:
   push:
     branches: [ main ]
+
 jobs:
   build:
     strategy:
