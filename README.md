@@ -1,6 +1,6 @@
 # SNS API 서비스
 
-22.11.29~22.12. `Nest.js` `BACKEND`
+22.11.29~ `Nest.js` `BACKEND`
 
 ## 개요
 
