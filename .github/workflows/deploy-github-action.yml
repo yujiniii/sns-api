@@ -34,7 +34,7 @@ jobs:
       - name: Build
         run: |
           npm install
-          npm build
+          npm run build
 
 
         # [3] 빌드된 파일을 zip 형태로 저장, S3에 보내게 됨
