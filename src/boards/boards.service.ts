@@ -154,30 +154,6 @@ export class BoardsService {
     return hashtags_db;
   }
 
-  // async transaction(data: DataSource, boardId: number) {
-  //   // ----------- 조회수 +1 트랜잭션 -------------(안됨 힝구리퐁퐁)
-  //   const qRunner = await data.createQueryRunner();
-  //   await qRunner.connect();
-  //   await qRunner.startTransaction();
-  //   try {
-  //     console.log('startTransaction');
-  //     await qRunner.manager
-  //       .createQueryBuilder()
-  //       .update()
-  //       .set({ watchCount: 'watchCount+1' })
-  //       .where('boardId = :boardId', { boardId: boardId })
-  //       .execute();
-  //     await qRunner.commitTransaction();
-  //     console.log('commitTransaction');
-  //   } catch (err) {
-  //     console.log('rollbackTransaction');
-  //     console.log(err);
-  //     await qRunner.rollbackTransaction();
-  //   } finally {
-  //     console.log('release');
-  //     await qRunner.release();
-  //   }
-  // }
   async foundEmail(email: string) {
     const user = await this.userRepo
       .findOne({
