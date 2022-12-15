@@ -8,7 +8,12 @@ import { BoardsModule } from './boards/boards.module';
 import { LikesModule } from './likes/likes.module';
 
 @Module({
-  imports: [UsersModule, TypeOrmModule.forRoot(typeORMConfig), BoardsModule, LikesModule],
+  imports: [
+    UsersModule,
+    TypeOrmModule.forRoot(typeORMConfig),
+    BoardsModule,
+    LikesModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
