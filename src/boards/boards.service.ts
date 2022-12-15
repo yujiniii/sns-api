@@ -2,6 +2,7 @@
 import {
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,6 +18,8 @@ import { Board } from './entities/board.entity';
 
 @Injectable()
 export class BoardsService {
+  private readonly logger: Logger = new Logger(BoardsService.name);
+
   constructor(
     @InjectRepository(Board)
     private boardRepo: Repository<Board>,
@@ -34,6 +37,9 @@ export class BoardsService {
       hashtags: hashtags_db.join(' '),
       user,
     });
+    this.logger.log(
+      `no.${newBoard.boardId} ${newBoard.title} 이 정상적으로 게시되었습니다.`,
+    );
     await this.boardRepo.save(newBoard);
     return newBoard;
   }
@@ -59,9 +65,10 @@ export class BoardsService {
       .getMany();
 
     if (!boards || typeof boards === 'undefined') {
+      this.logger.error(`입력하신 조건의 게시글을 조회할 수 없습니다.`);
       throw new NotFoundException('조회 오류');
     }
-    console.log(boards);
+    this.logger.log(`정상적으로 조회되었습니다.`);
     return boards;
   }
 
@@ -75,6 +82,9 @@ export class BoardsService {
       .execute();
 
     const theBoard = await this.foundBoard(id); // 조회수 변경 이후  조회
+    this.logger.log(
+      `no.${theBoard.boardId} ${theBoard.title} 를 조회하였습니다.`,
+    );
     return theBoard;
   }
 
@@ -93,38 +103,42 @@ export class BoardsService {
         .execute();
 
       const theBoard = await this.foundBoard(id); // 수정 이후  조회
+      this.logger.log(
+        `no.${theBoard.boardId} ${theBoard.title} 를 수정하였습니다.`,
+      );
       return theBoard;
     } else {
-      throw new ForbiddenException('본인의 게시글만 삭제가 가능합니다.');
+      this.logger.error(`본인의 게시글만 수정이 가능합니다.`);
+      throw new ForbiddenException('본인의 게시글만 수정이 가능합니다.');
     }
   }
 
   async remove(id: number, getUser) {
     const user = await this.foundEmail(getUser.email);
     const board = await this.foundBoard(id);
-    console.log('user out fn : ', user);
-    console.log('board out fn : ', board);
-    console.log(user.userId, board.user.userId);
     if (user.userId === board.user.userId) {
       await this.boardRepo.softDelete(id).catch((err) => {
-        console.log(err);
+        this.logger.error(err);
         throw new NotFoundException('삭제할 게시물이 존재하지 않습니다.');
       });
     } else {
+      this.logger.error(`본인의 게시글만 삭제가 가능합니다.`);
       throw new ForbiddenException('본인의 게시글만 삭제가 가능합니다.');
     }
-    return { message: '삭제 성공' };
+    this.logger.log('정상적으로 삭제하였습니다.');
+    return { message: '정상적으로 삭제하였습니다.' };
   }
 
   async restore(id: number, getUser) {
     await this.boardRepo.restore(id);
     const user = await this.foundEmail(getUser.email);
     const board = await this.foundBoard(id);
-    console.log(board);
     if (board.user.userId === user.userId) {
-      return { message: '복원 성공' };
+      this.logger.log('정상적으로 복원하였습니다.');
+      return { message: '정상적으로 복원하였습니다.' };
     } else {
       await this.boardRepo.softDelete(id);
+      this.logger.error(`작성자만 삭제가 가능합니다.`);
       throw new ForbiddenException('작성자만 삭제가 가능합니다.');
     }
   }
@@ -160,10 +174,11 @@ export class BoardsService {
         where: { email: email },
       })
       .catch((err) => {
-        console.log(err);
+        this.logger.error(err);
         throw new NotFoundException('사용자가 없습니다.');
       });
     if (!user || typeof user === 'undefined') {
+      this.logger.error(`사용자(${email})가 없습니다.`);
       throw new NotFoundException(`사용자(${email})가 없습니다.`);
     } else {
       return user;
@@ -174,10 +189,11 @@ export class BoardsService {
     const board = await this.boardRepo
       .findOne({ where: { boardId: id } })
       .catch((err) => {
-        console.log(err);
+        this.logger.error(err);
         throw new NotFoundException('게시글이 없습니다.');
       });
     if (!board || typeof board === 'undefined') {
+      this.logger.error(`게시글(no.${id})이 없습니다.`);
       throw new NotFoundException(`게시글(no.${id})이 없습니다.`);
     } else {
       return board;
