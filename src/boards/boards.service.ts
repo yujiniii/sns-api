@@ -42,12 +42,12 @@ export class BoardsService {
     const {
       keyword = '',
       hastags = '',
-      orderby = 'createdAt',
-      isAsc = 'ASC',
+      orderBy,
+      isAsc,
       page = '10',
-      pageno = '1',
+      pageNo = '1',
     } = searchBoardDto;
-    const offset = (Number(pageno) - 1) * Number(page);
+    const offset = (Number(pageNo) - 1) * Number(page);
     const boards = await this.boardRepo
       .createQueryBuilder()
       .where('title like  :key', { key: '%' + keyword + '%' })
@@ -55,7 +55,7 @@ export class BoardsService {
       .orWhere('hashtags like  :key', { key: '%' + hastags + '%' })
       .take(Number(page))
       .skip(offset)
-      .orderBy(orderby, isAsc)
+      .orderBy(orderBy, isAsc)
       .getMany();
 
     if (!boards || typeof boards === 'undefined') {
