@@ -19,30 +19,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-
-        #        # [1] CICD 에는 필요하진 않지만, 동적으로 secrets 값을 주입하는 방법
-        #      - name: Set yaml file
-        #        uses: microsoft/variable-substitution@v1
-        #        with:
-        #          files: ${{ env.RESOURCE_PATH }}
-        #        env:
-        #          override.value: ${{ secrets.DI_FROM_SECRET }}
-        #          # override.value: 'from deploy.yaml' <-- 이렇게 사용해도 주입이 된다.
-
-
-        # [2] 파일 빌드
+        #  파일 빌드
       - name: Build
         run: |
           npm install
           npm run build
 
 
-        # [3] 빌드된 파일을 zip 형태로 저장, S3에 보내게 됨
+        # 빌드된 파일을 zip 형태로 저장, S3에 보내게 됨
       - name: Make zip file
         run: zip -r ./$GITHUB_SHA.zip . # $GITHUB_SHA를 통해 zip이름 자동으로 만들어줌
         shell: bash
 
-        # [4]
+        #
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -50,7 +39,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-        # [5]
+        #
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
 

@@ -16,14 +16,8 @@ jobs:
       - name: my build
         run: |
           npm install
+          npm run test
           npm run build
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
-  # - name: npm cache
-  #   uses: actions/cache@v2
-  #   with:
-  #     path: ~/.npm
-  #     key: ${{runner.os}}-build-${{hashFiles('**/package-lock.json')}}
-  #     restore-key: |
-  #       ${{runner.os}}-build-${{hashFiles('**/package-lock.json')}}
