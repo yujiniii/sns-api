@@ -18,9 +18,9 @@ jobs:
         uses: cloudtype-github-actions/deploy@v1
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
-          project: sns-api2
+          project: sns-api
           yaml: |-
-            name: sns-api
+            name: sns-api2
             app: node@16
             options:
               git:
