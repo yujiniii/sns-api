@@ -1,5 +1,6 @@
 import { IsEnum } from 'class-validator';
 
+// enum을 쓰지 않는 것이 좋다 함 -> 다른 방법 찾아보기
 enum SORTING {
   ASC = 'ASC',
   DESC = 'DESC',
