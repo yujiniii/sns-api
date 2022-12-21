@@ -20,8 +20,8 @@ jobs:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
           project: sns-api
           yaml: |-
-            name: sns-api3
-            app: web
+            name: sns-api
+            app: nestJs
             options:
               git:
                 ref: ${{ github.ref }}
