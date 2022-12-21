@@ -20,8 +20,8 @@ jobs:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
           project: sns-api
           yaml: |-
-            name: sns-api2
-            app: node@16
+            name: sns-api3
+            app: web
             options:
               git:
                 ref: ${{ github.ref }}
