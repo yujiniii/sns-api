@@ -1,54 +1,54 @@
-# NOT USE NOW
-name: CI-CD
-
-on:
-  push:
-    branches:
-      - main
-
-env:
-  S3_BUCKET_NAME: tiltil
-  CODE_DEPLOY_APPLICATION_NAME: sns-api-deploy
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: tiltil-server
-#  RESOURCE_PATH: ./src/main/resources/application.yaml
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-        #  파일 빌드
-      - name: Build
-        run: |
-          npm install
-          npm run build
-
-
-        # 빌드된 파일을 zip 형태로 저장, S3에 보내게 됨
-      - name: Make zip file
-        run: zip -r ./$GITHUB_SHA.zip . # $GITHUB_SHA를 통해 zip이름 자동으로 만들어줌
-        shell: bash
-
-        #
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-        #
-      - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
-
-        # [6]
-      - name: Code Deploy
-        run: |
-          aws deploy create-deployment \
-          --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
-          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip
+## NOT USE NOW
+#name: CI-CD
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#
+#env:
+#  S3_BUCKET_NAME: tiltil
+#  CODE_DEPLOY_APPLICATION_NAME: sns-api-deploy
+#  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: tiltil-server
+##  RESOURCE_PATH: ./src/main/resources/application.yaml
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#
+#        #  파일 빌드
+#      - name: Build
+#        run: |
+#          npm install
+#          npm run build
+#
+#
+#        # 빌드된 파일을 zip 형태로 저장, S3에 보내게 됨
+#      - name: Make zip file
+#        run: zip -r ./$GITHUB_SHA.zip . # $GITHUB_SHA를 통해 zip이름 자동으로 만들어줌
+#        shell: bash
+#
+#        #
+#      - name: Configure AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+#          aws-region: ${{ secrets.AWS_REGION }}
+#
+#        #
+#      - name: Upload to S3
+#        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
+#
+#        # [6]
+#      - name: Code Deploy
+#        run: |
+#          aws deploy create-deployment \
+#          --deployment-config-name CodeDeployDefault.AllAtOnce \
+#          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+#          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+#          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip
