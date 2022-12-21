@@ -19,11 +19,11 @@ jobs:
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
           project: sns-api
-#          yaml: |-
-#            name: myapp
-#            app: html
-#            options:
-#              git:
-#                ref: ${{ github.ref }}
-#                url: git@github.com:${{ github.repository }}.git
-#              docbase: /docs
+          yaml: |-
+            name: myapp
+            app: web
+            options:
+              git:
+                ref: ${{ github.ref }}
+                url: git@github.com:${{ github.repository }}.git
+              docbase: /dist
