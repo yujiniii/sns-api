@@ -14,6 +14,11 @@ jobs:
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
           ghtoken: ${{ secrets.GHP_TOKEN }}
+      - name: build
+        run: |
+          npm install
+          npm run build
+          npm run start:prod
       - name: Deploy
         uses: cloudtype-github-actions/deploy@v1
         with:
@@ -26,3 +31,6 @@ jobs:
               git:
                 url: https://github.com/yujiniii/sns-api.git
               docbase: /dist
+      - name: start service
+        run: |
+          npm install
