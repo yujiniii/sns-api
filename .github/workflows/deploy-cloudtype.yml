@@ -18,10 +18,10 @@ jobs:
         uses: cloudtype-github-actions/deploy@v1
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
-          project: sns-api
+          project: sns-api2
           yaml: |-
             name: sns-api
-            app: nestjs
+            app: node@16
             options:
               git:
                 ref: ${{ github.ref }}
