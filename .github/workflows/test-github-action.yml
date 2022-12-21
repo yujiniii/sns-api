@@ -1,23 +1,23 @@
-name: sns-github-action
-on:
-  push:
-    branches: [ main ]
-jobs:
-  build:
-    strategy:
-      matrix:
-        node-version: [ 16.x, 12.x, 10.x ]
-
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v3
-
-      - name: my build
-        run: |
-          npm install
-          npm run test
-          npm run build
-
-      - run: echo "🍏 This job's status is ${{ job.status }}."
-
+#name: sns-github-action
+#on:
+#  push:
+#    branches: [ main ]
+#jobs:
+#  build:
+#    strategy:
+#      matrix:
+#        node-version: [ 16.x, 12.x, 10.x ]
+#
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout source code
+#        uses: actions/checkout@v3
+#
+#      - name: my build
+#        run: |
+#          npm install
+#          npm run test
+#          npm run build
+#
+#      - run: echo "🍏 This job's status is ${{ job.status }}."
+#
