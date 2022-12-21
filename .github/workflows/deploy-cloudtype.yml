@@ -21,7 +21,7 @@ jobs:
           project: sns-api
           yaml: |-
             name: sns-api
-            app: nestJs
+            app: node@16
             options:
               git:
                 ref: ${{ github.ref }}
